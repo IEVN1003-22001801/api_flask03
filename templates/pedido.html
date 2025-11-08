@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as macro %}
+{% block content %}
+
+<div style="background-color: #a0b8d8; padding: 15px; border: 1px solid #000;">
+    <h1>Pedidos de Pizza</h1>
+
+    <form action="" method="post" novalidate>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 33%;">
+                    {{ macro.campoNuevo(form.nombre) }}
+                </td>
+                <td style="width: 33%;">
+                    {{ macro.campoNuevo(form.direccion) }}
+                </td>
+                <td style="width: 33%;">
+                    {{ macro.campoNuevo(form.telefono) }}
+                </td>
+            </tr>
+        </table>
+
+        <hr style="border: 1px solid #000; margin: 15px 0;">
+
+        <table style="width: 100%;">
+            <tr>
+                <td style="vertical-align: top; width: 30%;">
+                    {{ macro.campoNuevo(form.tamanio) }}
+                </td>
+
+                <td style="vertical-align: top; width: 30%;">
+                    <strong>Ingredientes</strong><br>
+                    <input type="checkbox" name="ingredientes" value="Jamon"> Jamón $10<br>
+                    <input type="checkbox" name="ingredientes" value="Pina"> Piña $10<br>
+                    <input type="checkbox" name="ingredientes" value="Champinones"> Champiñones $10
+                </td>
+                
+                <td style="vertical-align: top; width: 40%; text-align: center;">
+                    {{ macro.campoNuevo(form.num_pizzas) }}
+                    <br>
+                    <input type="submit" name="agregar" value="Agregar" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; cursor: pointer;">
+                </td>
+            </tr>
+        </table>
+
+        <hr style="border: 1px solid #000; margin: 15px 0;">
+
+        <h3>Detalle del Pedido</h3>
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Tamaño</th>
+                    <th>Ingredientes</th>
+                    <th>Num. Pizzas</th>
+                    <th>SubTotal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% set num = 0 %}
+                {% for p in carrito %}
+                <tr>
+                    <td style="text-align: center;">{{ p.tamanio }}</td>
+                    <td style="text-align: center;">
+                        {% for ing in p.ingredientes %}
+                            {{ ing }} 
+                        {% endfor %}
+                    </td>
+                    <td style="text-align: center;">{{ p.num_pizzas }}</td>
+                    <td style="text-align: center;">${{ p.subtotal }}</td>
+                    <td style="text-align: center;">
+                        <form method="post" style="display: inline;">
+                            <input type="hidden" name="index" value="{{ num }}">
+                            <input type="submit" name="quitar" value="Quitar" style="background-color: #f44336; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                        </form>
+                    </td>
+                </tr>
+
+                {% set num = num + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if carrito %}
+        <br>
+        <div style="text-align: center;">
+            <input type="submit" name="terminar" value="Terminar" style="background-color: #008CBA; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px;">
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #f0f0f0; border: 1px solid #ccc;">
+
+    <h3>Ventas del día</h3>
+    {% for v in ventas %}
+        <p><strong>{{ v.nombre }}</strong> total ${{ v.total }}</p>
+    {% endfor %}
+
+    {% if ventas %}
+    <h3>Ventas totales del día: ${{ total_dia }}</h3>
+    {% endif %}
+
+    <form action="/ventas_totales" method="get" style="margin-top: 15px;">
+        <input type="submit" value="Ventas totales por día" style="background-color: #6c757d; color: white; border: none; padding: 8px 15px; cursor: pointer;">
+    </form>
+</div>
+
+{% endblock %}

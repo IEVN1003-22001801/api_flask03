@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Área de Figuras Geométricas (Plano)</title>
+</head>
+<body>
+    <div>
+        <h1>Calculadora de Área de Figuras</h1>
+        
+        <!-- SECCIÓN DE RESULTADO -->
+        {% if resultado %}
+        <div class="result-box">
+            {{ resultado }}
+        </div>
+        {% endif %}
+
+        <!-- FORMULARIO PRINCIPAL -->
+        <form method="POST">
+            
+            <h3>Seleccione una Forma</h3>
+            <div>
+                
+                <!-- Radio Button: Triángulo -->
+                <label>
+                    <input type="radio" name="forma" value="triangulo" onchange="this.form.submit()" required 
+                        {% if forma_seleccionada == 'triangulo' %}checked{% endif %}>
+                    Triángulo
+                </label>
+
+                <!-- Radio Button: Rectángulo -->
+                <label>
+                    <input type="radio" name="forma" value="rectangulo" onchange="this.form.submit()"
+                        {% if forma_seleccionada == 'rectangulo' %}checked{% endif %}>
+                    Rectángulo
+                </label>
+
+                <!-- Radio Button: Círculo -->
+                <label>
+                    <input type="radio" name="forma" value="circulo" onchange="this.form.submit()"
+                        {% if forma_seleccionada == 'circulo' %}checked{% endif %}>
+                    Círculo
+                </label>
+
+                <!-- Radio Button: Pentágono -->
+                <label>
+                    <input type="radio" name="forma" value="pentagono" onchange="this.form.submit()"
+                        {% if forma_seleccionada == 'pentagono' %}checked{% endif %}>
+                    Pentágono
+                </label>
+            </div>
+
+            <!-- CONTENEDORES DE ENTRADA DE DIMENSIONES -->
+            {% if forma_seleccionada %}
+            <div class="input-group">
+                <h3>Ingrese las Dimensiones</h3>
+                
+                {% if forma_seleccionada == 'triangulo' %}
+                    <label for="base">Base:</label>
+                    <input type="number" step="any" name="base" id="base" placeholder="Escribe la base" required>
+                    
+                    <label for="altura">Altura:</label>
+                    <input type="number" step="any" name="altura" id="altura" placeholder="Escribe la altura" required>
+                
+                {% elif forma_seleccionada == 'rectangulo' %}
+                    <label for="longitud">Longitud:</label>
+                    <input type="number" step="any" name="longitud" id="longitud" placeholder="Escribe la longitud" required>
+                    
+                    <label for="anchura">Anchura:</label>
+                    <input type="number" step="any" name="anchura" id="anchura" placeholder="Escribe la anchura" required>
+                
+                {% elif forma_seleccionada == 'circulo' %}
+                    <label for="radio">Radio:</label>
+                    <input type="number" step="any" name="radio" id="radio" placeholder="Escribe el radio" required>
+                
+                {% elif forma_seleccionada == 'pentagono' %}
+                    <label for="lado">Longitud del Lado:</label>
+                    <input type="number" step="any" name="lado" id="lado" placeholder="Escribe la longitud de un lado" required>
+                {% endif %}
+                
+                <!-- Este botón solo se muestra si una forma está seleccionada -->
+                <button type="submit">Calcular Área</button>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>
