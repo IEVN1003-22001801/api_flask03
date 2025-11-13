@@ -6,12 +6,47 @@ from datetime import date
 import forms
 import pizza
 
+
 app = Flask(__name__)
 
 
 @app.route('/')
 def home():
     return "Hello, Worldl"
+
+@app.route('/figuras', methods=['GET','POST'])
+def figuras():
+    area = None
+    figura_forms = forms.FigurasForm(request.form)
+    if request.method == 'POST' and figura_forms.validate():
+        fig = figura_forms.figura.data
+        base = altura = 0
+    #Si es rectangulos o trangulos la base y la altura va ser flotante o o
+        if fig in ['rect', 'tri']:
+            try:
+                base = float(figura_forms.base.data or 0)
+            except ValueError:
+                base = 0
+            try:
+                altura = float(figura_forms.altura.data or 0)
+            except ValueError:
+                altura = 0
+    #Si es circulo o pentagono solo la base va ser flotante o 0
+        elif fig in ['cir', 'pent']:
+            try:
+                base = float(figura_forms.base.data or 0)
+            except ValueError:
+                base = 0
+                
+        if fig == 'rect':
+            area = base * altura
+        elif fig == 'tri':
+            area = (base * altura) / 2
+        elif fig == 'cir':
+            area = math.pi * (base ** 2)
+        elif fig == 'pent':
+            area = (5 * base**2) / (4 * math.tan(math.pi/5))
+    return render_template('figuras.html', form = figura_forms, area=area)
 
 @app.route("/pedido", methods=['GET', 'POST'])
 def pedido():
